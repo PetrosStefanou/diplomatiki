@@ -1,17 +1,15 @@
-print('dose dyo akeraious h exit gia exodo')
+import my_test_functions as mtf 
+import matplotlib.pyplot as plt
 
-x = int(input('dose 1o akeraio: '))
+for i in range(10):
+    a = i
+    b = i + 1
 
-z = int(input('dose 2o akeraio: '))
+    x = mtf.add(a, b)
 
+    y = mtf.square(a)
 
-while type(x) != int or type(z) != int:
-    print('dose akeraio h exit gia exodo')
-    x = input('dose 1o akeraio: ')
-    z = input('dose 2o akeraio: ')
-    if x == 'exit' or z == 'exit':
-        break
-else:
-    s = x+z
-    p = x*z
-    print('to athroisma einai {} kai to ginomeno {}'.format(s,p))
+    plt.plot(a, y)
+
+    print('the sum is {:1.2f} and the square is {:1.2f}'.format(x, y))
+
