@@ -10,6 +10,7 @@ for i in range(10):
     y = mtf.square(a)
 
     plt.plot(a, y)
+    plt.show()
 
     print('the sum is {:1.2f} and the square is {:1.2f}'.format(x, y))
 
