@@ -9,6 +9,7 @@ for i in range(10):
 
     y = mtf.square(a)
 
+    fig = plt.figure()
     plt.plot(a, y)
     plt.show()
 
