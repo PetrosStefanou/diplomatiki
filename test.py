@@ -1,13 +1,22 @@
-import my_test_fun as mtf 
+
+import my_test_functions as mtf 
 import matplotlib.pyplot as plt
 
+fig = plt.figure()
+a = []
+b = []
+x = []
+y = []
+for i in range(10):
+    a.append(i)
+    b.append(i + 1)
 
+    x.append(mtf.add(a[i], b[i]))
 
-x = mtf.x(a)
-y = mtf.y(b)
+    y.append(mtf.square(a[i]))
+    print('the sum is {:1.2f} and the square is {:1.2f}'.format(x[i], y[i]))
 
-s = x + y
-p = x*y
-    print('to athroisma einai {} kai to ginomeno {}'.format(s,p))
+plt.plot(a, y)
+plt.show()
+   
 
-plt.plot([1,2,3],[1,4,9])
