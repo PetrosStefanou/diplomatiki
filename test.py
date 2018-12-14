@@ -1,6 +1,6 @@
+
 import my_test_functions as mtf 
 import matplotlib.pyplot as plt
-
 
 fig = plt.figure()
 a = []
@@ -18,6 +18,5 @@ for i in range(10):
 
 plt.plot(a, y)
 plt.show()
-    
-
+   
 
