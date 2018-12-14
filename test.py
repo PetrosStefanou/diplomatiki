@@ -1,17 +1,23 @@
 import my_test_functions as mtf 
 import matplotlib.pyplot as plt
 
+
+fig = plt.figure()
+a = []
+b = []
+x = []
+y = []
 for i in range(10):
-    a = i
-    b = i + 1
+    a.append(i)
+    b.append(i + 1)
 
-    x = mtf.add(a, b)
+    x.append(mtf.add(a[i], b[i]))
 
-    y = mtf.square(a)
+    y.append(mtf.square(a[i]))
+    print('the sum is {:1.2f} and the square is {:1.2f}'.format(x[i], y[i]))
 
-    fig = plt.figure()
-    plt.plot(a, y)
-    plt.show()
+plt.plot(a, y)
+plt.show()
+    
 
-    print('the sum is {:1.2f} and the square is {:1.2f}'.format(x, y))
 
