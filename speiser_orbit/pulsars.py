@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 
 import math
 import numpy as np
@@ -40,13 +38,13 @@ def Pulsars(k):
         pulsar[i]['Blc'] =  pulsar[i]['B_sur']*(r_sur/pulsar[i]['rlc'])**3/2
 
         #Γ_rrl για ακτινοβολία curvature
-#         pulsar[i]['gamma_rrl_curv'] = 4*10**7*(pulsar[i]['B_sur']/10**13)**(0.25)*pulsar[i]['P']**(-0.25)
+        #pulsar[i]['gamma_rrl_curv'] = 4*10**7*(pulsar[i]['B_sur']/10**13)**(0.25)*pulsar[i]['P']**(-0.25)
 
         #Γ_rrl για ακτινοβολία σύγχροτρον
         pulsar[i]['gamma_rrl_syn'] = 1.2*10**12*pulsar[i]['P']**(3/2)*pulsar[i]['B_sur']**(-0.5)
 
         #χαρακτηριστικός χρόνος επιτάχυνσης μέχρι το limit της curvature
-#         pulsar[i]['t_acc_curv'] = pulsar[i]['gamma_rrl_curv']*rest_energy/(e_charge*3*10**10*pulsar[i]['Blc'])
+        #pulsar[i]['t_acc_curv'] = pulsar[i]['gamma_rrl_curv']*rest_energy/(e_charge*3*10**10*pulsar[i]['Blc'])
 
         #χαρακτηριστικός χρόνος επιτάχυνσης μέχρι το limit της συγχροτρον
         pulsar[i]['t_acc_syn'] = pulsar[i]['gamma_rrl_syn']*rest_energy/(e_charge*3*10**10*pulsar[i]['Blc'])
@@ -55,34 +53,19 @@ def Pulsars(k):
         pulsar[i]['t_acc_remain'] = pulsar[i]['rlc']/(k*c)
 
         #γυροπερίοδος των φορτίων που εισέρχονται στο φύλλο με γ_injection
-#         pulsar[i]['gperiod_inj'] = 2*math.pi*gamma_inj*e_mass*c/(e_charge*pulsar[i]['Blc'])
+        #pulsar[i]['gperiod_inj'] = 2*math.pi*gamma_inj*e_mass*c/(e_charge*pulsar[i]['Blc'])
 
         #μέγιστος παράγοντας Lorentz που μπορεί να κερδίσει το σωματίδιο
         pulsar[i]['gamma_max'] = pulsar[i]['Blc']*pulsar[i]['rlc']/k*e_charge/rest_energy
     
-    for i in pulsar:
-        print('{}'.format(i))
-        for j in pulsar[i]:
-            print('\t{} = {:1.2E}\n'.format(j,pulsar[i][j]))
+#     for i in pulsar:
+#         print('{}'.format(i))
+#         for j in pulsar[i]:
+#             print('\t{} = {:1.2E}\n'.format(j,pulsar[i][j]))
             
     return pulsar
 
-    
 
-
-# In[2]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
