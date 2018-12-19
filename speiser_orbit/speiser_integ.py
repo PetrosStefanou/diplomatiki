@@ -8,7 +8,7 @@ import numpy as np
 import speiser_fun as sf
 import pulsars
 
-
+gamma1 = 10**3
 
 #σύστημα διαφορικών με απώλειες ακτινοβολίας
 def speiser3D(state, t, Delta, delta, B_0, q = 1):
@@ -16,9 +16,9 @@ def speiser3D(state, t, Delta, delta, B_0, q = 1):
     x, ux, y, uy, z, uz  = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    duxdt =  -q*sf.Flor_x(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*ux
-    duydt =  q*sf.Flor_y(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*uy
-    duzdt =  q*sf.Flor_z(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*uz
+    duxdt =  (q*sf.Flor_x(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*ux)*gamma1
+    duydt =  (q*sf.Flor_y(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*uy)*gamma1
+    duzdt =  (q*sf.Flor_z(y, z, ux, uy, uz, Delta, delta) -Frad[-1]*uz)*gamma1
     
     dxdt = ux/sf.gamma(ux,uy,uz)
     dydt = uy/sf.gamma(ux,uy,uz)
@@ -38,9 +38,9 @@ def speiser3D_noloss(state1, t, Delta, delta, B_0, q = 1):
     x, ux, y, uy, z, uz  = state1
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    duxdt =  -sf.Flor_x(y, z, ux, uy, uz, Delta, delta) 
-    duydt =  sf.Flor_y(y, z, ux, uy, uz, Delta, delta)
-    duzdt =  sf.Flor_z(y, z, ux, uy, uz, Delta, delta)
+    duxdt =  sf.Flor_x(y, z, ux, uy, uz, Delta, delta)*gamma1 
+    duydt =  sf.Flor_y(y, z, ux, uy, uz, Delta, delta)*gamma1
+    duzdt =  sf.Flor_z(y, z, ux, uy, uz, Delta, delta)*gamma1
     
     dxdt = ux/sf.gamma(ux,uy,uz)
     dydt = uy/sf.gamma(ux,uy,uz)
@@ -48,7 +48,7 @@ def speiser3D_noloss(state1, t, Delta, delta, B_0, q = 1):
     
     derivs = np.array([dxdt, duxdt, dydt, duydt, dzdt, duzdt])
       
-#     print(gamma1*Ez(y), Frad)
+    # print(sf.gamma(ux, uy, uz), np.sqrt(ux**2 + uy**2 + uz**2), sf.Ez(z,Delta))
     
     return derivs
 
@@ -61,7 +61,7 @@ def oloklirosi(gamma0, Delta, delta, B_0, Dt = 10000):
     x1, ux1, y1, uy1, z1, uz1 = [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0)
 
     #χρόνος της ολοκλήρωσης, σε μονάδες [qB0/mc]
-    t = np.linspace(0.0, 2*Delta, Dt)
+    t = np.linspace(0.0, 100*Delta, Dt)
     
     for i in range(0, len(gamma0)-1):
         
@@ -84,4 +84,4 @@ def oloklirosi(gamma0, Delta, delta, B_0, Dt = 10000):
     
     return np.array([x, ux, y, uy, z, uz, x1, ux1, y1, uy1, z1, uz1])
 
-
+# x, ux, y, uy, z, uz, 

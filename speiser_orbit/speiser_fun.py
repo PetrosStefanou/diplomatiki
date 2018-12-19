@@ -37,7 +37,7 @@ def Ez(z, Delta):
     if z <= Delta:
         ez = 1.0
     else:
-        ez = 0.0
+        ez = 1.0
     
     return ez
 
