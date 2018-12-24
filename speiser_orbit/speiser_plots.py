@@ -59,13 +59,13 @@ def plot_zyx(x, y, z, ux, uy, uz, x1, y1, z1, ux1, uy1, uz1, omegaB, delta, Delt
 def plot_gamma(x, y, z, ux, uy, uz, x1, y1, z1, ux1, uy1, uz1, omegaB, delta, Delta, gamma0, save = 0):
     fig = plt.figure()
     for i in range(0, len(x1)-1):
-        plt.plot(z[i]/Delta, sf.gamma(ux[i], uy[i], uz[i]), label = 'losses, $\gamma_0 = %s$' %int(gamma0[i]))
-        plt.plot(z1[i]/Delta, sf.gamma(ux1[i], uy1[i], uz1[i]), '--', label = 'no losses, $\gamma_0 = %s$' %int(gamma0[i]))
+        plt.plot(z[i]*c/omegaB, sf.gamma(ux[i], uy[i], uz[i]), label = 'losses, $\gamma_0 = %s$' %int(gamma0[i]))
+        plt.plot(z1[i]*c/omegaB, sf.gamma(ux1[i], uy1[i], uz1[i]), '--', label = 'no losses, $\gamma_0 = %s$' %int(gamma0[i]))
         # plt.yscale('log')
         plt.xlabel('z/Delta')
         plt.ylabel('gamma')
         # plt.axes('equal')
-        plt.axvline(x = 1*c/omegaB, linestyle = ':', color = 'r')
+        plt.axvline(x = Delta*c/omegaB, linestyle = ':', color = 'r')
         plt.legend(loc = 'best')
         if save == True:
             plt.savefig('gamma{}'.format(i))

@@ -8,10 +8,10 @@ import numpy as np
 import speiser_fun as sf
 import pulsars
 
-gamma1 = 10**3
+
 
 #σύστημα διαφορικών με απώλειες ακτινοβολίας
-def speiser3D(state, t, Delta, delta, B_0, q = 1):
+def speiser3D(state, t, Delta, delta, B_0, gamma1, q = 1):
     
     x, ux, y, uy, z, uz  = state
     
@@ -33,7 +33,7 @@ def speiser3D(state, t, Delta, delta, B_0, q = 1):
     return derivs
 
 #σύστημα διαφορικών χωρίς απώλειες ακτινοβολίας
-def speiser3D_noloss(state1, t, Delta, delta, B_0, q = 1):
+def speiser3D_noloss(state1, t, Delta, delta, B_0, gamma1, q = 1):
     
     x, ux, y, uy, z, uz  = state1
     
@@ -54,14 +54,14 @@ def speiser3D_noloss(state1, t, Delta, delta, B_0, q = 1):
 
 #ολοκλήρωση
 
-def oloklirosi(gamma0, Delta, delta, B_0, Dt = 10000):
+def oloklirosi(gamma0, Delta, delta, B_0, gamma1, t_end = 2., Dt = 10000):
 
     x, ux, y, uy, z, uz = [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0)
 
     x1, ux1, y1, uy1, z1, uz1 = [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0)
 
     #χρόνος της ολοκλήρωσης, σε μονάδες [qB0/mc]
-    t = np.linspace(0.0, 100*Delta, Dt)
+    t = np.linspace(0.0, t_end*Delta, Dt)
     
     for i in range(0, len(gamma0)-1):
         
@@ -73,10 +73,10 @@ def oloklirosi(gamma0, Delta, delta, B_0, Dt = 10000):
         state0 = np.array([0.0, 0.0, delta, -np.sqrt(gamma0[i]**2 - 1), 0.0, 0.0])
     
         #ολοκλήρωση τροχιάς με απώλειες
-        state = odeint(speiser3D, state0, t, args = (Delta, delta, B_0, ), full_output=0)
+        state = odeint(speiser3D, state0, t, args = (Delta, delta, B_0, gamma1, ), full_output=0)
     
         #ολοκλήρωση τροχιάς χωρίς απώλειες
-        state1 = odeint(speiser3D_noloss, state0, t, args = (Delta, delta, B_0, ), full_output=0)
+        state1 = odeint(speiser3D_noloss, state0, t, args = (Delta, delta, B_0, gamma1, ), full_output=0)
     
         x[i], ux[i], y[i], uy[i], z[i], uz[i] = state[:,0], state[:,1], state[:,2], state[:,3], state[:,4], state[:,5]  
     

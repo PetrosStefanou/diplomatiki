@@ -2,8 +2,9 @@
 # coding: utf-8
 
 import numpy as np
-from pulsars import c, e_charge
-
+from pulsars import c, e_charge, Pulsars
+k = 3*10**2
+pulsar = Pulsars(k)
 #παράγοντας Lorentz
 def gamma(ux,uy,uz):
     
@@ -27,7 +28,7 @@ def By(z, Delta):
     if z <= Delta:
         by = -1.0
     else:
-        by = -1.0
+        by = -0.0
     
     return by
 
@@ -37,7 +38,7 @@ def Ez(z, Delta):
     if z <= Delta:
         ez = 1.0
     else:
-        ez = 1.0
+        ez = 0.0
     
     return ez
 
@@ -110,7 +111,7 @@ def Rc(ux, uy, uz, duxdt, duydt, duzdt):
 def Ploss(ux, uy, uz, duxdt, duydt, duzdt, B_0):
 
     losses = (2*e_charge*gamma(ux, uy, uz)**4)/(3*B_0*Rc(ux, uy, uz, duxdt, duydt, duzdt)**2)
-
+    losses = (2*e_charge*gamma(ux, uy, uz)**4)/(3*B_0)/pulsar['crab']['rlc']**2
     return losses
 
 #Radiation reaction force (αδιάστατο αλλά πρέπει να πολλαπλασιαστεί με ui σε κάθε εξίσωση)
