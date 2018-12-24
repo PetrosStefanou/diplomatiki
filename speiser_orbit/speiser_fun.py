@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
+import numpy as np
+from pulsars import c, e_charge, Pulsars
+k = 3*10**2
+pulsar = Pulsars(k)
 #παράγοντας Lorentz
 def gamma(ux,uy,uz):
     
@@ -11,77 +12,68 @@ def gamma(ux,uy,uz):
     
     return g
 
-#μαγνητικό πεδίο σε μονάδες Β0 = Βlc
-def Bx(y, z):
+#μαγνητικό πεδίο στη x-διεύθυνση σε μονάδες [Β0 = Βlc]
+def Bx(y, z, Delta, delta):
+    
     if z <= Delta:
-        if y < -delta:
-            bx = 1.
-        elif y >= -delta and y <= delta:
-            bx = -np.tanh(y/delta)
-        else:
-            bx = -1.
+        bx = -np.tanh(y/delta)
     else:
-        bx = 0.
+        bx = -np.tanh(y/delta)
+    
     return bx
 
-#ηλεκτρικό πεδίο σε μονάδες Β0 = Βlc
-def Ez(z):
+#μαφνητικό πεδίο στην y-διευθυνση σε μονάδες [Β0 = Βlc]
+def By(z, Delta):
+    
+    if z <= Delta:
+        by = -1.0
+    else:
+        by = -0.0
+    
+    return by
+
+#ηλεκτρικό πεδίο στη z-διευθυνση σε μονάδες [Β0 = Βlc]
+def Ez(z, Delta):
     
     if z <= Delta:
         ez = 1.0
     else:
-        ez = 30.0
+        ez = 0.0
     
     return ez
 
-def By(z):
-    if z <= Delta:
-        by = 1.
-    else:
-        by = 30.
-        
-    return by
-        
 #γωνία εκπομπής
 def theta(ux, uy, uz):
     
-    th = np.arctan(uy/yz)
+    th = np.arctan(uy/uz)
     
     return th
 
 #κρίσιμη συχνότητα
-def nu_crit(ux, uy, uz, y):
+def nu_crit(y, z, ux, uy, uz, Delta, delta):
     
-    nu = np.abs(2.8*10E+6*Bx(y)*gamma(ux, uy, uz)**2)
+    nu = np.abs(2.8*10E+6*Bx(y, z, Delta, delta)*gamma(ux, uy, uz)**2)
     
     return nu
 
-
-# In[2]:
-
-
 #συνιστώσες της δύναμης Lorentz
-def Flor_x(y, z, ux, uy, uz):
+def Flor_x(y, z, ux, uy, uz, Delta, delta):
     
-    fx = -By(z)*uz/gamma(ux, uy, uz)
+    fx = -By(z, Delta)*uz/gamma(ux, uy, uz)
     
     return fx
 
-def Flor_y(y, z, ux, uy, uz):
+def Flor_y(y, z, ux, uy, uz, Delta, delta):
     
-    fy = Bx(y, z)*uz/gamma(ux, uy, uz)
+    fy = Bx(y, z, Delta, delta)*uz/gamma(ux, uy, uz)
     
     return fy
 
-def Flor_z(y, z, ux, uy, uz):
+def Flor_z(y, z, ux, uy, uz, Delta, delta):
     
-    fz = Ez(z) + (ux*By(z) - uy*Bx(y, z))/gamma(ux, uy, uz)
+    fz = Ez(z, Delta) + (ux*By(z, Delta) - uy*Bx(y, z, Delta, delta))/gamma(ux, uy, uz)
     
     return fz
-
-
-# In[3]:
-
 
 #μέτρο του dudt
 def dudt(duxdt, duydt, duzdt):
@@ -116,22 +108,16 @@ def Rc(ux, uy, uz, duxdt, duydt, duzdt):
     return rcurv
 
 #Ενεργειακές απώλειες λόγω ακτινοβολίας (αδιάστατο, έχει διαιρεθεί με ecB0)
-def Ploss(ux, uy, uz, duxdt, duydt, duzdt):
+def Ploss(ux, uy, uz, duxdt, duydt, duzdt, B_0):
 
     losses = (2*e_charge*gamma(ux, uy, uz)**4)/(3*B_0*Rc(ux, uy, uz, duxdt, duydt, duzdt)**2)
-
+    losses = (2*e_charge*gamma(ux, uy, uz)**4)/(3*B_0)/pulsar['crab']['rlc']**2
     return losses
 
 #Radiation reaction force (αδιάστατο αλλά πρέπει να πολλαπλασιαστεί με ui σε κάθε εξίσωση)
-def F_rad(ux, uy, uz, duxdt, duydt, duzdt):
+def F_rad(ux, uy, uz, duxdt, duydt, duzdt, B_0):
     
-    frad = Ploss(ux, uy, uz, duxdt, duydt, duzdt)*gamma(ux, uy, uz)/(gamma(ux, uy, uz)**2 - 1)
+    frad = Ploss(ux, uy, uz, duxdt, duydt, duzdt, B_0)*gamma(ux, uy, uz)/(gamma(ux, uy, uz)**2 - 1)
     
     return frad
-
-
-# In[ ]:
-
-
-
 
