@@ -54,7 +54,7 @@ def speiser3D_noloss(state1, t, Delta, delta, B_0, gamma1, q = 1):
 
 #ολοκλήρωση
 
-def oloklirosi(gamma0, Delta, delta, B_0, gamma1, t_end = 2., Dt = 10000):
+def oloklirosi(gamma0, Delta, delta, B_0, gamma1, t_end = 2., Dt = 10**4):
 
     x, ux, y, uy, z, uz = [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0), [0.]*len(gamma0)
 
