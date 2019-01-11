@@ -62,7 +62,7 @@ def plot_gamma(x, y, z, ux, uy, uz, x1, y1, z1, ux1, uy1, uz1, omegaB, delta, De
         plt.plot(z[i]*c/omegaB, sf.gamma(ux[i], uy[i], uz[i]), label = 'losses, $\gamma_0 = %s$' %int(gamma0[i]))
         plt.plot(z1[i]*c/omegaB, sf.gamma(ux1[i], uy1[i], uz1[i]), '--', label = 'no losses, $\gamma_0 = %s$' %int(gamma0[i]))
         # plt.yscale('log')
-        plt.xlabel('z/Delta')
+        plt.xlabel('z')
         plt.ylabel('gamma')
         # plt.axes('equal')
         plt.axvline(x = Delta*c/omegaB, linestyle = ':', color = 'r')
