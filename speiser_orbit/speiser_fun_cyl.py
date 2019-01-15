@@ -13,9 +13,9 @@ def gamma(u1,u2,u3):
 #################################
 
 #μαγνητικό πεδίο στη φ-διεύθυνση σε μονάδες [Β0 = Βlc]
-def Bphi(r, z_cyl, Delta, delta):
+def Bphi(r, z_cyl, Rlc, Delta, delta):
     
-    if r <= Delta:
+    if r <= Rlc and r >= Rlc - Delta:
         bphi = -np.tanh(z_cyl/delta)
     else:
         bphi = -np.tanh(z_cyl/delta)
@@ -23,9 +23,9 @@ def Bphi(r, z_cyl, Delta, delta):
     return bphi
 
 #μαφνητικό πεδίο στην z-διευθυνση σε μονάδες [Β0 = Βlc]
-def Bz_cyl(r, Delta):
+def Bz_cyl(r, Rlc, Delta):
     
-    if r <= Delta:
+    if r <= Rlc and r >= Rlc - Delta:
         bz = -1.0
     else:
         bz = -0.0
@@ -33,30 +33,30 @@ def Bz_cyl(r, Delta):
     return bz
 
 #ηλεκτρικό πεδίο στη r-διευθυνση σε μονάδες [Β0 = Βlc] 
-def Er(r, Delta):
+def Er(r, Rlc, Delta):
     
-    if r <= Delta:
+    if r <= Rlc and r >= Rlc - Delta:
         er = 1.0
     else:
         er = 0.0
     
     return er
 
-def Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Delta, delta):
+def Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
     
-    fr = Er(r, Delta) + (uphi*Bz_cyl(r, Delta) - uz_cyl*Bphi(r, z_cyl, Delta, delta))/gamma(ur, uphi, uz_cyl) 
+    fr = Er(r, Rlc, Delta) + (uphi*Bz_cyl(r, Rlc, Delta) - uz_cyl*Bphi(r, z_cyl, Rlc, Delta, delta))/gamma(ur, uphi, uz_cyl) 
     
     return fr
 
-def Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Delta, delta):
+def Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
     
-    fphi = -Bz_cyl(r, Delta)*ur/gamma(ur, uphi, uz_cyl) 
+    fphi = -Bz_cyl(r, Rlc, Delta)*ur/gamma(ur, uphi, uz_cyl) 
     
     return fphi
 
-def Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Delta, delta):
+def Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
     
-    fz = Bphi(r, z_cyl, Delta, delta)*ur/gamma(ur, uphi, uz_cyl)
+    fz = Bphi(r, z_cyl, Rlc, Delta, delta)*ur/gamma(ur, uphi, uz_cyl)
     
     return fz
 
@@ -118,3 +118,8 @@ def F_rad(r, ur, uphi, uz_cyl, durdt, duphidt, duzdt, B_0, rad_losses):
     
     return frad
 
+def nu_crit_curv(r, ur, uphi, uz_cyl, durdt, duphidt, duzdt):
+    
+    nu = (3*c/2)*gamma(ur, uphi, uz_cyl)**3/Rc(r, ur, uphi, uz_cyl, durdt, duphidt, duzdt)
+
+    return nu

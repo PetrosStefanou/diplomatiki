@@ -19,9 +19,9 @@ def gamma(ux,uy,uz):
 #################################
 
 #μαγνητικό πεδίο στη x-διεύθυνση σε μονάδες [Β0 = Βlc]
-def Bx(y, z, Delta, delta):
+def Bx(y, z, Rlc, Delta, delta):
     
-    if z <= Delta:
+    if z <= Rlc and z >= Rlc - Delta:
         bx = -np.tanh(y/delta)
     else:
         bx = -np.tanh(y/delta)
@@ -29,9 +29,9 @@ def Bx(y, z, Delta, delta):
     return bx
 
 #μαφνητικό πεδίο στην y-διευθυνση σε μονάδες [Β0 = Βlc]
-def By(z, Delta):
+def By(z, Rlc, Delta):
     
-    if z <= Delta:
+    if z <= Rlc and z >= Rlc - Delta:
         by = -1.0
     else:
         by = -0.0
@@ -39,9 +39,9 @@ def By(z, Delta):
     return by
 
 #ηλεκτρικό πεδίο στη z-διευθυνση σε μονάδες [Β0 = Βlc]
-def Ez(z, Delta):
+def Ez(z, Rlc, Delta):
     
-    if z <= Delta:
+    if z <= Rlc and z >= Rlc - Delta:
         ez = 1.0
     else:
         ez = 0.0
@@ -49,21 +49,21 @@ def Ez(z, Delta):
     return ez
 
 #συνιστώσες της δύναμης Lorentz
-def Flor_x(y, z, ux, uy, uz, Delta, delta):
+def Flor_x(y, z, ux, uy, uz, Rlc, Delta, delta):
     
-    fx = -By(z, Delta)*uz/gamma(ux, uy, uz)
+    fx = -By(z, Rlc, Delta)*uz/gamma(ux, uy, uz)
     
     return fx
 
-def Flor_y(y, z, ux, uy, uz, Delta, delta):
+def Flor_y(y, z, ux, uy, uz, Rlc, Delta, delta):
     
-    fy = Bx(y, z, Delta, delta)*uz/gamma(ux, uy, uz)
+    fy = Bx(y, z, Rlc, Delta, delta)*uz/gamma(ux, uy, uz)
     
     return fy
     
-def Flor_z(y, z, ux, uy, uz, Delta, delta):
+def Flor_z(y, z, ux, uy, uz, Rlc, Delta, delta):
     
-    fz = Ez(z, Delta) + (ux*By(z, Delta) - uy*Bx(y, z, Delta, delta))/gamma(ux, uy, uz)
+    fz = Ez(z, Rlc, Delta) + (ux*By(z, Rlc, Delta) - uy*Bx(y, z, Rlc, Delta, delta))/gamma(ux, uy, uz)
     
     return fz
 
@@ -78,9 +78,9 @@ def theta(ux, uy, uz):
     return th
 
 #κρίσιμη συχνότητα
-def nu_crit(y, z, ux, uy, uz, Delta, delta):
+def nu_crit(y, z, ux, uy, uz, Rlc, Delta, delta):
     
-    nu = np.abs(2.8*10E+6*Bx(y, z, Delta, delta)*gamma(ux, uy, uz)**2)
+    nu = np.abs(2.8*10E+6*Bx(y, z, Rlc, Delta, delta)*gamma(ux, uy, uz)**2)
     
     return nu
 
