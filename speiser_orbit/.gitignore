@@ -7,3 +7,6 @@ test_integ_trick.py
 #ignore pycash and checkpoints files
 __pycache__/
 .ipynb_checkpoints/
+
+#ignore auxiliary notebook
+Untitled1.ipynb

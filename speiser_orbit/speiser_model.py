@@ -60,7 +60,7 @@ def speiser_cyl(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
     dzdt = uz_cyl/sfc.gamma(ur,uphi,uz_cyl)
     
     Frad.append(sfc.F_rad(r, ur, uphi, uz_cyl, durdt, duphidt, duzdt, B_0, sfc.Ploss))
-    
+    # print(r, Rlc)
     derivs = np.array([drdt, durdt, dphidt, duphidt, dzdt, duzdt])
 
     # print(sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta))

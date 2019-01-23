@@ -11,7 +11,7 @@ r_sur = 1.5*10**6
 rest_energy = 9.1093897*10**(-28)*(2.99792458*10**10)**2
 e_charge = 4.8032068*10**(-10)
 e_mass = 9.1093897*10**(-28)
-
+h = 6.62606885*10**(-27)
 #παράμετροι
 # k = 1000      #multiplicity, αντιστοιχεί σε young pulsar
 gamma_inj = 10    #αρχικός παράγοντας λόρεντζ των ποζιτρονίων
@@ -64,6 +64,8 @@ def Pulsars(k):
 #             print('\t{} = {:1.2E}\n'.format(j,pulsar[i][j]))
             
     return pulsar
+
+# print(Pulsars(100)['vela'])
 
 
 

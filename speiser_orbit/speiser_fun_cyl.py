@@ -105,7 +105,7 @@ def Ploss_Rlc(r, ur, uphi, uz_cyl, durdt, duphidt, duzdt, B_0):
     k = 3*10**2
     pulsar = Pulsars(k)
     
-    losses = (2*e_charge*gamma(ur, uphi, uz_cyl)**4)/(3*B_0)/pulsar['crab']['rlc']**2
+    losses = (2*e_charge*gamma(ur, uphi, uz_cyl)**4)/(3*B_0*pulsar['crab']['rlc']**2)
 
     return losses
 
