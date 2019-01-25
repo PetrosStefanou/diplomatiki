@@ -1,24 +1,26 @@
 import numpy as np
 import speiser_fun_cyl as sfc
-from pulsars import h
+from pulsars import h, c, e_charge
+from scipy.special import kv
+import scipy.integrate
 
 def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0): 
-    durdt = [0]*len(gamma0 - 1)
-    duphidt = [0]*len(gamma0 - 1)
-    duzdt = [0]*len(gamma0 - 1)
+    durdt = np.zeros(((len(gamma0) - 1), len(r[0])))
+    duphidt = np.zeros(((len(gamma0) - 1), len(r[0])))
+    duzdt = np.zeros(((len(gamma0) - 1), len(r[0])))
 
-    r_curv = [0]*len(gamma0 - 1)
-    nu_crit = [0]*len(gamma0 - 1)
-    p_rad = [0]*len(gamma0 - 1)
+    r_curv = np.zeros(((len(gamma0) - 1), len(r[0])))
+    nu_crit = np.zeros(((len(gamma0) - 1), len(r[0])))
+    p_rad = np.zeros(((len(gamma0) - 1), len(r[0])))
 
     for i in range(len(gamma0) - 1):
-        durdt[i] = np.zeros(len(r[i]))
-        duphidt[i] = np.zeros(len(r[i]))
-        duzdt[i] = np.zeros(len(r[i]))
+        # durdt[i] = np.zeros(len(r[i]))
+        # duphidt[i] = np.zeros(len(r[i]))
+        # duzdt[i] = np.zeros(len(r[i]))
         
-        r_curv[i] = np.zeros(len(r[i]))
-        nu_crit[i] = np.zeros(len(r[i]))
-        p_rad[i] = np.zeros(len(r[i]))
+        # r_curv[i] = np.zeros(len(r[i]))
+        # nu_crit[i] = np.zeros(len(r[i]))
+        # p_rad[i] = np.zeros(len(r[i]))
         
         Frad = [0.]
         for j in range(len(r[i])):
@@ -46,11 +48,11 @@ def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0):
     return (r_curv, nu_crit, p_rad)
 
 
-def spectrum(nu_crit, p_rad, gamma0, dt = 1):
+def spectrum(nu_crit, p_rad, gamma0, t):
 
     max_en = max(h*nu_crit[0]*6.25E+11)
     min_en = min(h*nu_crit[0]*6.25E+11)
-    for i in range(0, 1):
+    for i in range(0, len(gamma0)-1):
         if max(h*nu_crit[i]*6.25E+11) > max_en:
             max_en = max(h*nu_crit[i]*6.25E+11)
         if min(h*nu_crit[i]*6.25E+11) < min_en:
@@ -63,22 +65,42 @@ def spectrum(nu_crit, p_rad, gamma0, dt = 1):
     while en[-1] < max_en:
         en.append(en[-1] + 0.1*en[-1])
     print(len(en))
+    np.asarray(en)
+    print(type(en))
         
-    ph_num = [0]*len(gamma0)
-    ph_en = [0]*len(gamma0)
+    ph_num = np.zeros((len(gamma0) - 1, len(en)))
+    ph_en = np.zeros((len(gamma0) - 1, len(en)))
     # print('{:1.2E}, {:1.2E}'.format(max_en, min_en))
 
     
-
+    ph_num_tot = np.zeros(len(en))
+    ph_en_tot = np.zeros(len(en))
     for i in range(0, len(gamma0)-1):
-        ph_num[i] = np.zeros(len(en))
-        ph_en[i] = np.zeros(len(en))
+        # ph_num[i] = np.zeros(len(en))
+        # ph_en[i] = np.zeros(len(en))
+        
         
     #     print(len(ph_num[i]))
-        for j in range(len(nu_crit[i])):
-            for w in range(0, len(en)-1):
+        for j in range(0, len(nu_crit[i])):
+            for w in range(0, len(en)):
                 if h*nu_crit[i][j]*6.25E+11 >= en[w] and h*nu_crit[i][j]*6.25E+11 < en[w+1]:
                     ph_num[i][w] += 1
-                    ph_en[i][w] += p_rad[i][j]*dt
+                    ph_num_tot[w] += 1
+                    ph_en[i][w] += p_rad[i][j]
+                    ph_en_tot[w] += p_rad[i][j]
+                    
+    
 
-    return (en, ph_num, ph_en)
+    return (en, ph_num, ph_en, ph_num_tot, ph_en_tot)
+
+def f(n, wc): 
+    I = scipy.integrate.quad(lambda x: kv(5./3., x), n/wc, +np.inf)[0]
+    return I
+
+def sing_en_spec(nu, wc, g, rc):
+
+    p = np.zeros(len(nu))
+    for i in range(0, len(nu) - 1):
+        p[i] = np.sqrt(3)*e_charge**2*g*nu[i]/(2*np.pi*rc*wc)*f(nu[i], wc)
+
+    return p

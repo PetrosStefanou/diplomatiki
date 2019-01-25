@@ -39,9 +39,10 @@ delta = 1000.    #πάχος του φύλλου ρεύματος, αδιάστ�
 start_time = time.time()
 
 T = 60.
-dt = 6*10**3
+N = 6*10**3
+t = np.linspace(0.0, T*Delta, N)
 
-(r, ur, phi, uphi, z_cyl, uz_cyl), dic_cyl = si.oloklirosi(gamma0, Rlc, Delta, delta, B_0, T, dt, sm.speiser_cyl, coord = 'cyl')
+(r, ur, phi, uphi, z_cyl, uz_cyl), dic_cyl = si.oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, sm.speiser_cyl, coord = 'cyl')
 
 # #λήξη χρονομέτρησης
 elapsed = time.time() - start_time

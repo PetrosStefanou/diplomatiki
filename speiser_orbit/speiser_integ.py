@@ -15,9 +15,9 @@ def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, system, coord):
     
     x1, u1, x2, u2, x3, u3 = [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0)
 
-
+    total = 0
     for i in range(0, len(gamma0)-1):
-        
+        start_time = time.time()
         global Frad
         Frad = [0.]
 
@@ -32,9 +32,19 @@ def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, system, coord):
         
         #ολοκλήρωση τροχιάς
         state = odeint(system, init, t, args = (Rlc, Delta, delta, B_0, Frad, ), mxstep = 3000, full_output=1)
-        print(gamma0[i])
+        
         x1[i], u1[i], x2[i], u2[i], x3[i], u3[i] = state[0][:,0], state[0][:,1], state[0][:,2], state[0][:,3], state[0][:,4], state[0][:,5]
 
         dic = state[1]
-
+        
+        elapsed = time.time() - start_time
+        total += elapsed
+        hours, rem = divmod(elapsed, 3600)
+        minutes, seconds = divmod(rem, 60)
+        print('runtime for gamma0 = {} is {}h {}m {}s'.format(int(gamma0[i]),int(hours), int(minutes), int(seconds)))
+    
+    hours, rem = divmod(total, 3600)
+    minutes, seconds = divmod(rem, 60)
+    print('total runtime = {}h {}m {}s'.format(int(hours), int(minutes), int(seconds)))
+    
     return np.array([x1, u1, x2, u2, x3, u3]), dic
