@@ -8,5 +8,9 @@ test_integ_trick.py
 __pycache__/
 .ipynb_checkpoints/
 
-#ignore auxiliary notebook
+#ignore auxiliary notebooks
 Untitled1.ipynb
+Untitled.ipynb
+
+#ignore binary saved data
+*.npz

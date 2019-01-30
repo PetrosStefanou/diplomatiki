@@ -4,7 +4,7 @@ import speiser_fun_cyl as sfc
 import pulsars
 
 #σύστημα διαφορικών με απώλειες ακτινοβολίας σε καρτεσιανές συντεταγμένες
-def speiser_cart(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
+def speiser_cart(state, t, Rlc, Delta, delta, B_0, Frad, q = +1):
     
     x, ux, y, uy, z, uz  = state
     
@@ -46,14 +46,14 @@ def speiser_cart_noloss(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
     return derivs
 
     #σύστημα διαφορικών με απώλειες ακτινοβολίας με ακτίνα καμπυλότητας υπολογισμένη από την τροχιά σε κυλινδρικές
-def speiser_cyl(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
+def speiser_cyl(state, t, Rlc, Delta, delta, B_0, Frad, q = +1):
     
     r, ur, phi, uphi, z_cyl, uz_cyl = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    durdt =  sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur 
-    duphidt =  sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi 
-    duzdt =  sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - Frad[-1]*uz_cyl
+    durdt =  q*sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur 
+    duphidt =  q*sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi 
+    duzdt =  q*sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - Frad[-1]*uz_cyl
     
     drdt = ur/sfc.gamma(ur,uphi,uz_cyl)
     dphidt = uphi/(r*sfc.gamma(ur,uphi,uz_cyl))
@@ -67,14 +67,14 @@ def speiser_cyl(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
     return derivs
 
 #σύστημα διαφορικών με απώλειες ακτινοβολίας με ακτίνα καμπυλότητας Rlc σε κυλινδρικές
-def speiser_cyl_Rlc(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
+def speiser_cyl_Rlc(state, t, Rlc, Delta, delta, B_0, Frad, q = -1):
     
     r, ur, phi, uphi, z_cyl, uz_cyl = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    durdt =  sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur 
-    duphidt =  sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi 
-    duzdt =  sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - Frad[-1]*uz_cyl
+    durdt =  q*sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur 
+    duphidt =  q*sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi 
+    duzdt =  q*sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - Frad[-1]*uz_cyl
     
     drdt = ur/sfc.gamma(ur,uphi,uz_cyl)
     dphidt = uphi/(r*sfc.gamma(ur,uphi,uz_cyl))
@@ -87,14 +87,14 @@ def speiser_cyl_Rlc(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
     return derivs
 
     #σύστημα διαφορικών χωρίς απώλειες ακτινοβολίας σε κυλινδρικές
-def speiser_cyl_noloss(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
+def speiser_cyl_noloss(state, t, Rlc, Delta, delta, B_0, Frad, q = -1):
     
     r, ur, phi, uphi, z_cyl, uz_cyl = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    durdt =  sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) 
-    duphidt =  sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl))
-    duzdt =  sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta)
+    durdt =  q*sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) 
+    duphidt =  q*sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl))
+    duzdt =  q*sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta)
     
     drdt = ur/sfc.gamma(ur,uphi,uz_cyl)
     dphidt = uphi/(r*sfc.gamma(ur,uphi,uz_cyl))

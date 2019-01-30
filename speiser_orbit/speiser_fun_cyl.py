@@ -17,6 +17,8 @@ def Bphi(r, z_cyl, Rlc, Delta, delta):
     
     if r <= Rlc and r >= Rlc - Delta:
         bphi = -np.tanh(z_cyl/delta)
+    elif r < Rlc - Delta:
+        bphi = 0.
     else:
         bphi = -np.tanh(z_cyl/delta)
     
@@ -27,8 +29,10 @@ def Bz_cyl(r, Rlc, Delta):
     
     if r <= Rlc and r >= Rlc - Delta:
         bz = -1.0
+    elif r < Rlc - Delta:
+        bz = -10.0
     else:
-        bz = -0.0
+        bz = 0.0
     
     return bz
 
