@@ -14,3 +14,9 @@ Untitled.ipynb
 
 #ignore binary saved data
 *.npz
+
+#ignore data folders and files
+/data
+/data_elect
+/data_positron
+parameters.txt

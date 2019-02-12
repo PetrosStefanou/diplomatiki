@@ -65,7 +65,7 @@ def Pulsars(k):
             
     return pulsar
 
-# print(Pulsars(100)['vela'])
+# print('{:1.2E}'.format(Pulsars(100)['crab']))
 
 
 

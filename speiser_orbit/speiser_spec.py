@@ -55,7 +55,7 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, t):
 
     min_en_pow = 6
     max_en_pow = 13
-    bin_num = 200
+    bin_num = 201
     # en = [min_en]
     # while en[-1] < max_en:
     #     en.append(en[-1] + 0.1*en[-1])
@@ -75,17 +75,17 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, t):
     ph_en_tot = np.zeros(len(en))
     for i in range(0, len(gamma0)-1):
         for j in range(0, len(nu_crit[i])):
-            for m in range(0, len(en)):
+            for m in range(0, len(en) - 1):
                 if h*nu_crit[i][j]*6.25E+11 >= en[m] and h*nu_crit[i][j]*6.25E+11 < en[m+1]:
                     if r[i][j] <= Rlc:
                         ph_num[i][m] += 1
-                        ph_en[i][m] += p_rad[i][j]
+                        ph_en[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     else:
                         ph_num_out[i][m] += 1
-                        ph_en_out[i][m] += p_rad[i][j]
+                        ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     
                     ph_num_tot[m] += 1
-                    ph_en_tot[m] += p_rad[i][j]
+                    ph_en_tot[m] += p_rad[i][j]/(en[m]-en[m-1])
     return (en, ph_num, ph_num_out, ph_en, ph_en_out, ph_num_tot, ph_en_tot)
 
 def f(n, wc): 

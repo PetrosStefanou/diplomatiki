@@ -11,7 +11,7 @@ import pulsars
 
 
 
-def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, w,  system, coord):
+def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, w, q, T, system, coord):
     
     x1, u1, x2, u2, x3, u3 = [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0), [0]*len(gamma0)
 
@@ -20,7 +20,10 @@ def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, w,  system, coord):
         start_time = time.time()
         global Frad
         Frad = [0.]
-
+        
+        u_drift = gamma0[i]/2.
+        uphi_0 = u_drift - np.sqrt(gamma0[i]**2/2. - 1)
+        uz_0 = -u_drift - np.sqrt(gamma0[i]**2/2. - 1)
         #αρχικές συνθήκες
         if coord == 'cart':
             
@@ -28,10 +31,11 @@ def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, w,  system, coord):
         
         elif coord == 'cyl':
             
-            init = np.array([Rlc - w*Delta, 0.0, 0.0, 0.0, delta, np.sqrt(gamma0[i]**2 - 1)])
+            init = np.array([Rlc - w*Delta, 0.0, 0.0, uphi_0, delta, uz_0])
         
         #ολοκλήρωση τροχιάς
-        state = odeint(system, init, t, args = (Rlc, Delta, delta, B_0, Frad, ), mxstep = 3000, full_output=1)
+        perc = [0.]
+        state = odeint(system, init, t, args = (Rlc, Delta, delta, B_0, Frad, q, T, perc), mxstep = 3000, full_output=1)
         
         x1[i], u1[i], x2[i], u2[i], x3[i], u3[i] = state[0][:,0], state[0][:,1], state[0][:,2], state[0][:,3], state[0][:,4], state[0][:,5]
 
