@@ -15,21 +15,28 @@ def gamma(u1,u2,u3):
 #μαγνητικό πεδίο στη φ-διεύθυνση σε μονάδες [Β0 = Βlc]
 def Bphi(r, z_cyl, Rlc, Delta, delta):
     
-    if r <= Rlc and r >= Rlc - Delta:
-        bphi = -np.tanh(z_cyl/delta)
-    elif r < Rlc - Delta:
+    if r >= Rlc and r <= Rlc + Delta:
+        if z_cyl <= np.abs(delta):
+            bphi = -z_cyl/delta
+        else:
+            bphi = -np.sign(z_cyl)
+        # bphi = -np.tanh(z_cyl/delta)
+    elif r < Rlc:
         bphi = 0.
     else:
-        bphi = -np.tanh(z_cyl/delta)
-    
+        if z_cyl <= np.abs(delta):
+            bphi = -z_cyl/delta
+        else:
+            bphi = -np.sign(z_cyl)
+        # bphi = -np.tanh(z_cyl/delta)
     return bphi
 
 #μαφνητικό πεδίο στην z-διευθυνση σε μονάδες [Β0 = Βlc]
 def Bz_cyl(r, Rlc, Delta):
     
-    if r <= Rlc and r >= Rlc - Delta:
+    if r >= Rlc and r <= Rlc + Delta:
         bz = -1.0
-    elif r < Rlc - Delta:
+    elif r < Rlc:
         bz = -10.0
     else:
         bz = 0.0
@@ -39,8 +46,8 @@ def Bz_cyl(r, Rlc, Delta):
 #ηλεκτρικό πεδίο στη r-διευθυνση σε μονάδες [Β0 = Βlc] 
 def Er(r, Rlc, Delta):
     
-    if r <= Rlc and r >= Rlc - Delta:
-        er = 1.0
+    if r >= Rlc and r <= Rlc + Delta:
+        er = 1.0*r/Rlc
     else:
         er = 0.0
     

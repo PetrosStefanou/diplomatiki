@@ -79,6 +79,7 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, t):
                 if h*nu_crit[i][j]*6.25E+11 >= en[m] and h*nu_crit[i][j]*6.25E+11 < en[m+1]:
                     if r[i][j] <= Rlc:
                         ph_num[i][m] += 1
+                        
                         ph_en[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     else:
                         ph_num_out[i][m] += 1

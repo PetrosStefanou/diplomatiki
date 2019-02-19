@@ -31,7 +31,7 @@ def oloklirosi(gamma0, Rlc, Delta, delta, B_0, t, w, q, T, system, coord):
         
         elif coord == 'cyl':
             
-            init = np.array([Rlc - w*Delta, 0.0, 0.0, uphi_0, delta, uz_0])
+            init = np.array([Rlc + w*Delta, 0.0, 0.0, uphi_0, delta, uz_0])
         
         #ολοκλήρωση τροχιάς
         perc = [0.]
