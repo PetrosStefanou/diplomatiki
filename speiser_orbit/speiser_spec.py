@@ -41,7 +41,7 @@ def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0):
     return (r_curv, nu_crit, p_rad)
 
 
-def spectrum(r, nu_crit, p_rad, gamma0, Rlc, t):
+def spectrum(r, nu_crit, p_rad, gamma0, Rlc, Delta, t):
 
     # max_en = max(h*nu_crit[0]*6.25E+11)
     # min_en = min(h*nu_crit[0]*6.25E+11)
@@ -77,11 +77,11 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, t):
         for j in range(0, len(nu_crit[i])):
             for m in range(0, len(en) - 1):
                 if h*nu_crit[i][j]*6.25E+11 >= en[m] and h*nu_crit[i][j]*6.25E+11 < en[m+1]:
-                    if r[i][j] <= Rlc:
+                    if r[i][j] <= Rlc + Delta and r[i][j] >= Rlc:
                         ph_num[i][m] += 1
                         
                         ph_en[i][m] += p_rad[i][j]/(en[m]-en[m-1])
-                    else:
+                    elif r[i][j] >= Rlc + Delta:
                         ph_num_out[i][m] += 1
                         ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     
