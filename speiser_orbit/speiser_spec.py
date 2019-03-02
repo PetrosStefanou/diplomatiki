@@ -4,7 +4,7 @@ from pulsars import h, c, e_charge
 from scipy.special import kv
 import scipy.integrate
 
-def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0): 
+def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init, gamma0, B_0): 
     durdt = np.zeros(((len(gamma0) - 1), len(r[0])))
     duphidt = np.zeros(((len(gamma0) - 1), len(r[0])))
     duzdt = np.zeros(((len(gamma0) - 1), len(r[0])))
@@ -17,15 +17,15 @@ def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0):
 
         Frad = [0.]
         for j in range(len(r[i])):
-            durdt[i][j] = sfc.Flor_r(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta) 
+            durdt[i][j] = sfc.Flor_r(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta_init) 
             + uphi[i][j]**2/(r[i][j]*sfc.gamma(ur[i][j], uphi[i][j], uz_cyl[i][j])) - Frad[-1]*ur[i][j]*0
 
             
-            duphidt[i][j] = sfc.Flor_phi(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta) 
+            duphidt[i][j] = sfc.Flor_phi(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta_init) 
             - uphi[i][j]*ur[i][j]/(r[i][j]*sfc.gamma(ur[i][j], uphi[i][j], uz_cyl[i][j])) - Frad[-1]*ur[i][j]*0 - Frad[-1]*ur[i][j]*0
 
             
-            duzdt[i][j] = sfc.Flor_z_cyl(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta)
+            duzdt[i][j] = sfc.Flor_z_cyl(r[i][j], phi[i][j], z_cyl[i][j], ur[i][j], uphi[i][j], uz_cyl[i][j], Rlc, Delta, delta_init)
             - Frad[-1]*ur[i][j]*0
 
             
@@ -41,7 +41,7 @@ def rc_nc_pr(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta, gamma0, B_0):
     return (r_curv, nu_crit, p_rad)
 
 
-def spectrum(r, nu_crit, p_rad, gamma0, Rlc, Delta, t):
+def spectrum(r, z_cyl, nu_crit, p_rad, gamma0, Rlc, Delta, delta_init, t):
 
     # max_en = max(h*nu_crit[0]*6.25E+11)
     # min_en = min(h*nu_crit[0]*6.25E+11)
@@ -68,6 +68,8 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, Delta, t):
     ph_en = np.zeros((len(gamma0) - 1, len(en)))
     ph_num_out = np.zeros((len(gamma0) - 1, len(en)))
     ph_en_out = np.zeros((len(gamma0) - 1, len(en)))
+    ph_num_sep = np.zeros((len(gamma0) - 1, len(en)))
+    ph_en_sep = np.zeros((len(gamma0) - 1, len(en)))
     # print('{:1.2E}, {:1.2E}'.format(max_en, min_en))
 
     
@@ -84,7 +86,9 @@ def spectrum(r, nu_crit, p_rad, gamma0, Rlc, Delta, t):
                     elif r[i][j] >= Rlc + Delta:
                         ph_num_out[i][m] += 1
                         ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
-                    
+                    elif r[i][j] < Rlc or z_cyl[i][j] > 2*sfc.delta(r[i][j], Rlc, Delta, delta_init):
+                        ph_num_sep[i][m] += 1
+                        ph_en_sep[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     ph_num_tot[m] += 1
                     ph_en_tot[m] += p_rad[i][j]/(en[m]-en[m-1])
     return (en, ph_num, ph_num_out, ph_en, ph_en_out, ph_num_tot, ph_en_tot)

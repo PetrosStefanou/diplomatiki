@@ -1,6 +1,9 @@
 import numpy as np
 from pulsars import c, e_charge, Pulsars
 
+#################################
+### Κυλινδρικές Συντεταγμένες ###
+#################################
 
 def gamma(u1,u2,u3):
     
@@ -8,24 +11,28 @@ def gamma(u1,u2,u3):
     
     return g
 
-#################################
-### Κυλινδρικές Συντεταγμένες ###
-#################################
+def delta(r, Rlc, Delta, delta_init):
+    if r <=  Rlc + Delta:
+        d = delta_init
+    else:
+        d = delta_init/10.
+
+    return d
 
 #μαγνητικό πεδίο στη φ-διεύθυνση σε μονάδες [Β0 = Βlc]
-def Bphi(r, z_cyl, Rlc, Delta, delta):
+def Bphi(r, z_cyl, Rlc, Delta, delta_init):
     
     if r > Rlc and r <= Rlc + Delta:
-        if z_cyl <= delta and z_cyl >= -delta:
-            bphi = -z_cyl/delta
+        if z_cyl <= delta(r, Rlc, Delta, delta_init) and z_cyl >= -delta(r, Rlc, Delta, delta_init):
+            bphi = -z_cyl/delta(r, Rlc, Delta, delta_init)
         else:
             bphi = -np.sign(z_cyl)
         # bphi = -np.tanh(z_cyl/delta)
     elif r <= Rlc:
         bphi = 0.
     else:
-        if z_cyl <= delta and z_cyl >= -delta:
-            bphi = -z_cyl/delta
+        if z_cyl <= delta(r, Rlc, Delta, delta_init) and z_cyl >= -delta(r, Rlc, Delta, delta_init):
+            bphi = -z_cyl/delta(r, Rlc, Delta, delta_init)
         else:
             bphi = -np.sign(z_cyl)
         # bphi = -np.tanh(z_cyl/delta)
@@ -55,21 +62,21 @@ def Er(r, Rlc, Delta):
     
     return er
 
-def Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
+def Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init):
     
-    fr = Er(r, Rlc, Delta) + (uphi*Bz_cyl(r, Rlc, Delta) - uz_cyl*Bphi(r, z_cyl, Rlc, Delta, delta))/gamma(ur, uphi, uz_cyl) 
+    fr = Er(r, Rlc, Delta) + (uphi*Bz_cyl(r, Rlc, Delta) - uz_cyl*Bphi(r, z_cyl, Rlc, Delta, delta_init))/gamma(ur, uphi, uz_cyl) 
     
     return fr
 
-def Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
+def Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init):
     
     fphi = -Bz_cyl(r, Rlc, Delta)*ur/gamma(ur, uphi, uz_cyl) 
     
     return fphi
 
-def Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta):
+def Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init):
     
-    fz = Bphi(r, z_cyl, Rlc, Delta, delta)*ur/gamma(ur, uphi, uz_cyl)
+    fz = Bphi(r, z_cyl, Rlc, Delta, delta_init)*ur/gamma(ur, uphi, uz_cyl)
     
     return fz
 

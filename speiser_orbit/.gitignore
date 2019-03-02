@@ -11,6 +11,7 @@ __pycache__/
 #ignore auxiliary notebooks
 Untitled1.ipynb
 Untitled.ipynb
+Untitled2.ipynb
 
 #ignore binary saved data
 *.npz
@@ -27,5 +28,9 @@ parameters.txt
 /data5
 /data6
 /data7
-/data8
+/data9
+/data10
+/data11
+/data12
+/data13
 

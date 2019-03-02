@@ -4,14 +4,14 @@ import speiser_fun_cyl as sfc
 import pulsars
 
 #σύστημα διαφορικών με απώλειες ακτινοβολίας σε καρτεσιανές συντεταγμένες
-def speiser_cart(state, t, Rlc, Delta, delta, B_0, Frad, q = +1):
+def speiser_cart(state, t, Rlc, Delta, delta_init, B_0, Frad, q = +1):
     
     x, ux, y, uy, z, uz  = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    duxdt =  q*sf.Flor_x(y, z, ux, uy, uz, Rlc, Delta, delta) -Frad[-1]*ux*0
-    duydt =  q*sf.Flor_y(y, z, ux, uy, uz, Rlc, Delta, delta) -Frad[-1]*uy*0
-    duzdt =  q*sf.Flor_z(y, z, ux, uy, uz, Rlc, Delta, delta) -Frad[-1]*uz*0
+    duxdt =  q*sf.Flor_x(y, z, ux, uy, uz, Rlc, Delta, delta_init) -Frad[-1]*ux*0
+    duydt =  q*sf.Flor_y(y, z, ux, uy, uz, Rlc, Delta, delta_init) -Frad[-1]*uy*0
+    duzdt =  q*sf.Flor_z(y, z, ux, uy, uz, Rlc, Delta, delta_init) -Frad[-1]*uz*0
     
     dxdt = ux/sf.gamma(ux,uy,uz)
     dydt = uy/sf.gamma(ux,uy,uz)
@@ -46,14 +46,14 @@ def speiser_cart_noloss(state, t, Rlc, Delta, delta, B_0, Frad, q = 1):
     return derivs
 
     #σύστημα διαφορικών με απώλειες ακτινοβολίας με ακτίνα καμπυλότητας υπολογισμένη από την τροχιά σε κυλινδρικές
-def speiser_cyl(state, t, Rlc, Delta, delta, B_0, Frad, q, T, perc):
+def speiser_cyl(state, t, Rlc, Delta, delta_init, B_0, Frad, q, T, perc):
     
     r, ur, phi, uphi, z_cyl, uz_cyl = state
     
     #αδιάστατες εξισώσεις, οι πραγματικές έχουν διαιρεθεί με c*ω0 = mc/eB0c
-    durdt =  q*sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur
-    duphidt =  q*sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi
-    duzdt =  q*sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta) - Frad[-1]*uz_cyl
+    durdt =  q*sfc.Flor_r(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init) + uphi**2/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*ur
+    duphidt =  q*sfc.Flor_phi(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init) - ur*uphi/(r*sfc.gamma(ur, uphi, uz_cyl)) - Frad[-1]*uphi
+    duzdt =  q*sfc.Flor_z_cyl(r, phi, z_cyl, ur, uphi, uz_cyl, Rlc, Delta, delta_init) - Frad[-1]*uz_cyl
     
     drdt = ur/sfc.gamma(ur,uphi,uz_cyl)
     dphidt = uphi/(r*sfc.gamma(ur,uphi,uz_cyl))
