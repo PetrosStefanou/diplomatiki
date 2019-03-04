@@ -91,7 +91,7 @@ def spectrum(r, z_cyl, nu_crit, p_rad, gamma0, Rlc, Delta, delta_init, t):
                         ph_en_sep[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     ph_num_tot[m] += 1
                     ph_en_tot[m] += p_rad[i][j]/(en[m]-en[m-1])
-    return (en, ph_num, ph_num_out, ph_en, ph_en_out, ph_num_tot, ph_en_tot)
+    return (en, ph_num, ph_num_out, ph_num_sep, ph_en, ph_en_out, ph_en_sep, ph_num_tot, ph_en_tot)
 
 def f(n, wc): 
     I = scipy.integrate.quad(lambda x: kv(5./3., x), n/wc, +np.inf)[0]
