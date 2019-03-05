@@ -16,6 +16,9 @@ Untitled2.ipynb
 #ignore binary saved data
 *.npz
 
+#ignore figures
+*.png
+
 #ignore data folders and files
 /data
 /data_elect
