@@ -70,7 +70,15 @@ def spectrum(r, z_cyl, nu_crit, p_rad, gamma0, Rlc, Delta, delta_init, t):
     ph_en_out = np.zeros((len(gamma0) - 1, len(en)))
     ph_num_sep = np.zeros((len(gamma0) - 1, len(en)))
     ph_en_sep = np.zeros((len(gamma0) - 1, len(en)))
+    ph_num_out2 = np.zeros((len(gamma0) - 1, len(en)))
+    ph_en_out2 = np.zeros((len(gamma0) - 1, len(en)))
     # print('{:1.2E}, {:1.2E}'.format(max_en, min_en))
+
+    delta1 = np.zeros(len(r[0]))
+    for j in range(len(r[0])):
+        delta1[j] = sfc.delta(r[0][j], Rlc, Delta, delta_init)
+        if r[0][j] == Rlc + Delta:
+            delta1[j] = np.NaN
 
     
     ph_num_tot = np.zeros(len(en))
@@ -81,17 +89,20 @@ def spectrum(r, z_cyl, nu_crit, p_rad, gamma0, Rlc, Delta, delta_init, t):
                 if h*nu_crit[i][j]*6.25E+11 >= en[m] and h*nu_crit[i][j]*6.25E+11 < en[m+1]:
                     if r[i][j] <= Rlc + Delta and r[i][j] >= Rlc:
                         ph_num[i][m] += 1
-                        
                         ph_en[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     elif r[i][j] >= Rlc + Delta:
-                        ph_num_out[i][m] += 1
-                        ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
-                    elif r[i][j] < Rlc or z_cyl[i][j] > 2*sfc.delta(r[i][j], Rlc, Delta, delta_init):
+                        if z_cyl[i][j] < delta1 and z_cyl>-delta1:
+                            ph_num_out[i][m] += 1
+                            ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
+                        else:
+                            ph_num_out2 += 1
+                            ph_en_out2[i][m] += p_rad[i][j]/(en[m]-en[m-1])
+                    elif z_cyl[i][j] > delta_init or z_cyl[i][j] < -delta_init:
                         ph_num_sep[i][m] += 1
                         ph_en_sep[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     ph_num_tot[m] += 1
                     ph_en_tot[m] += p_rad[i][j]/(en[m]-en[m-1])
-    return (en, ph_num, ph_num_out, ph_num_sep, ph_en, ph_en_out, ph_en_sep, ph_num_tot, ph_en_tot)
+    return (en, ph_num, ph_num_out, ph_num_out2, ph_num_sep, ph_en, ph_en_out, ph_en_out2, ph_en_sep, ph_num_tot, ph_en_tot)
 
 def f(n, wc): 
     I = scipy.integrate.quad(lambda x: kv(5./3., x), n/wc, +np.inf)[0]
