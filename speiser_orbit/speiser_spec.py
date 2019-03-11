@@ -91,13 +91,13 @@ def spectrum(r, z_cyl, nu_crit, p_rad, gamma0, Rlc, Delta, delta_init, t):
                         ph_num[i][m] += 1
                         ph_en[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     elif r[i][j] >= Rlc + Delta:
-                        if z_cyl[i][j] < delta1 and z_cyl>-delta1:
+                        if z_cyl[i][j] < delta1[j] and z_cyl[i][j]>-delta1[j]:
                             ph_num_out[i][m] += 1
                             ph_en_out[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                         else:
                             ph_num_out2 += 1
                             ph_en_out2[i][m] += p_rad[i][j]/(en[m]-en[m-1])
-                    elif z_cyl[i][j] > delta_init or z_cyl[i][j] < -delta_init:
+                    elif z_cyl[i][j] > delta_init or z_cyl[i][j] < -delta_init or r[i][j] < Rlc:
                         ph_num_sep[i][m] += 1
                         ph_en_sep[i][m] += p_rad[i][j]/(en[m]-en[m-1])
                     ph_num_tot[m] += 1
