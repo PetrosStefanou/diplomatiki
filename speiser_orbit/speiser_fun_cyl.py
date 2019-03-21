@@ -44,7 +44,7 @@ def Bz_cyl(r, Rlc, Delta):
     if r > Rlc and r <= Rlc + Delta:
         bz = -1.0
     elif r <= Rlc:
-        bz = -1000.0
+        bz = -10.0
     else:
         bz = 0.0
     
